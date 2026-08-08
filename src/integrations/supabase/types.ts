@@ -14,13 +14,317 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      loyalty_points: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_id: string
+          description: string
+          id: string
+          transaction_type: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          customer_id: string
+          description?: string
+          id?: string
+          transaction_type: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_id?: string
+          description?: string
+          id?: string
+          transaction_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_points_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_items: {
+        Row: {
+          id: string
+          order_id: string
+          price: number
+          product_id: string
+          quantity: number
+        }
+        Insert: {
+          id?: string
+          order_id: string
+          price: number
+          product_id: string
+          quantity: number
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          price?: number
+          product_id?: string
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          customer_id: string
+          customer_name: string
+          delivery_info: string
+          id: string
+          order_number: string
+          order_status: string
+          payment_method: string
+          payment_reference: string | null
+          payment_status: string
+          phone: string
+          total: number
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          customer_name?: string
+          delivery_info?: string
+          id?: string
+          order_number?: string
+          order_status?: string
+          payment_method?: string
+          payment_reference?: string | null
+          payment_status?: string
+          phone?: string
+          total?: number
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          customer_name?: string
+          delivery_info?: string
+          id?: string
+          order_number?: string
+          order_status?: string
+          payment_method?: string
+          payment_reference?: string | null
+          payment_status?: string
+          phone?: string
+          total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      premium_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_id: string
+          id: string
+          payment_reference: string | null
+          status: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          customer_id: string
+          id?: string
+          payment_reference?: string | null
+          status?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_id?: string
+          id?: string
+          payment_reference?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "premium_payments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          active: boolean
+          category: string
+          created_at: string
+          id: string
+          image: string | null
+          name: string
+          price: number
+          stock: number
+        }
+        Insert: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          name: string
+          price: number
+          stock?: number
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          name?: string
+          price?: number
+          stock?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          phone: string
+          premium_status: boolean
+          premium_unlocked_at: string | null
+          referral_code: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          name?: string
+          phone?: string
+          premium_status?: boolean
+          premium_unlocked_at?: string | null
+          referral_code?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          phone?: string
+          premium_status?: boolean
+          premium_unlocked_at?: string | null
+          referral_code?: string
+        }
+        Relationships: []
+      }
+      referral_points: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_id: string
+          description: string
+          id: string
+          transaction_type: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          customer_id: string
+          description?: string
+          id?: string
+          transaction_type: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_id?: string
+          description?: string
+          id?: string
+          transaction_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_points_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          points_awarded: number
+          referred_customer_id: string | null
+          referrer_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          points_awarded?: number
+          referred_customer_id?: string | null
+          referrer_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          points_awarded?: number
+          referred_customer_id?: string | null
+          referrer_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_referred_customer_id_fkey"
+            columns: ["referred_customer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      points_balance: {
+        Args: { _customer_id: string; _kind: string }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never
