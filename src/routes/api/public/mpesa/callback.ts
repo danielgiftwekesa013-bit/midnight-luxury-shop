@@ -38,9 +38,30 @@ export const Route = createFileRoute("/api/public/mpesa/callback")({
           .update({
             payment_status: status,
             order_status: status === "paid" ? "confirmed" : "pending",
-            payment_reference: receipt ? String(receipt) : null,
           })
           .eq("payment_reference", cb.CheckoutRequestID);
+
+        const { data: premium } = await supabaseAdmin
+          .from("premium_payments")
+          .update({ status })
+          .eq("payment_reference", cb.CheckoutRequestID)
+          .select("customer_id")
+          .maybeSingle();
+
+        if (premium && status === "paid") {
+          await supabaseAdmin
+            .from("profiles")
+            .update({ premium_status: true, premium_unlocked_at: new Date().toISOString() })
+            .eq("id", premium.customer_id);
+        }
+
+        if (receipt) {
+          await supabaseAdmin
+            .from("orders")
+            .update({ payment_reference: String(receipt) })
+            .eq("payment_reference", cb.CheckoutRequestID);
+        }
+
 
         return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
       },
