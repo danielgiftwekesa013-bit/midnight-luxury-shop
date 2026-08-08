@@ -321,10 +321,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      points_balance: {
-        Args: { _customer_id: string; _kind: string }
-        Returns: number
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
