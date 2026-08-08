@@ -35,11 +35,18 @@ export const initiateMpesaPayment = createServerFn({ method: "POST" })
         amount: Number(order.total),
         reference: order.order_number,
       });
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      await supabaseAdmin
+        .from("orders")
+        .update({ payment_reference: result.checkoutRequestId, payment_status: "waiting" })
+        .eq("id", order.id);
+
       return {
         state: "waiting" as const,
         message: "Check your phone and enter your M-Pesa PIN.",
         checkoutRequestId: result.checkoutRequestId,
       };
+
     } catch (e) {
       return {
         state: "failed" as const,
