@@ -34,17 +34,31 @@ function AuthScreen() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isValidPhone(phone)) return toast.error("Enter a valid Kenyan phone number.");
-    if (password.length < 8) return toast.error("Password must be at least 8 characters.");
-    if (mode === "up" && name.trim().length < 2) return toast.error("Enter your name.");
+    if (!isValidPhone(phone)) {
+      toast.error("Enter a valid Kenyan phone number.");
+      return;
+    }
+    if (password.length < 8) {
+      toast.error("Password must be at least 8 characters.");
+      return;
+    }
+    if (mode === "up" && name.trim().length < 2) {
+      toast.error("Enter your name.");
+      return;
+    }
 
     setBusy(true);
-    const error = mode === "in" ? await signIn(phone, password) : await signUp(name, phone, password);
+    const error =
+      mode === "in" ? await signIn(phone, password) : await signUp(name, phone, password);
     setBusy(false);
-    if (error) return toast.error(error);
+    if (error) {
+      toast.error(error);
+      return;
+    }
     toast.success(mode === "in" ? "Welcome back" : "Account created");
     void navigate({ to: "/" });
   };
+
 
   const field =
     "h-14 w-full rounded-2xl border border-border bg-card px-4 text-sm outline-none placeholder:text-muted-foreground focus:border-primary";
