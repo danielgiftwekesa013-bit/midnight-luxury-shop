@@ -21,7 +21,6 @@ import { Route as PremiumRouteImport } from './routes/premium'
 import { Route as RedeemRouteImport } from './routes/redeem'
 import { Route as ReferralsRouteImport } from './routes/referrals'
 import { Route as OrderOrderIdRouteImport } from './routes/order.$orderId'
-import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa/callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -83,11 +82,6 @@ const OrderOrderIdRoute = OrderOrderIdRouteImport.update({
   path: '/order/$orderId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
-  id: '/api/public/mpesa/callback',
-  path: '/api/public/mpesa/callback',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -102,7 +96,6 @@ export interface FileRoutesByFullPath {
   '/redeem': typeof RedeemRoute
   '/referrals': typeof ReferralsRoute
   '/order/$orderId': typeof OrderOrderIdRoute
-  '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,7 +110,6 @@ export interface FileRoutesByTo {
   '/redeem': typeof RedeemRoute
   '/referrals': typeof ReferralsRoute
   '/order/$orderId': typeof OrderOrderIdRoute
-  '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,7 +125,6 @@ export interface FileRoutesById {
   '/redeem': typeof RedeemRoute
   '/referrals': typeof ReferralsRoute
   '/order/$orderId': typeof OrderOrderIdRoute
-  '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -150,7 +141,6 @@ export interface FileRouteTypes {
     | '/redeem'
     | '/referrals'
     | '/order/$orderId'
-    | '/api/public/mpesa/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -165,7 +155,6 @@ export interface FileRouteTypes {
     | '/redeem'
     | '/referrals'
     | '/order/$orderId'
-    | '/api/public/mpesa/callback'
   id:
     | '__root__'
     | '/'
@@ -180,7 +169,6 @@ export interface FileRouteTypes {
     | '/redeem'
     | '/referrals'
     | '/order/$orderId'
-    | '/api/public/mpesa/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -196,7 +184,6 @@ export interface RootRouteChildren {
   RedeemRoute: typeof RedeemRoute
   ReferralsRoute: typeof ReferralsRoute
   OrderOrderIdRoute: typeof OrderOrderIdRoute
-  ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -285,13 +272,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrderOrderIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/mpesa/callback': {
-      id: '/api/public/mpesa/callback'
-      path: '/api/public/mpesa/callback'
-      fullPath: '/api/public/mpesa/callback'
-      preLoaderRoute: typeof ApiPublicMpesaCallbackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -308,8 +288,17 @@ const rootRouteChildren: RootRouteChildren = {
   RedeemRoute: RedeemRoute,
   ReferralsRoute: ReferralsRoute,
   OrderOrderIdRoute: OrderOrderIdRoute,
-  ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

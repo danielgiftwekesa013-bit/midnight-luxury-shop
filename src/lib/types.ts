@@ -34,4 +34,4 @@ export type PaymentState =
   | "cancelled"
   | "timeout";
 
-export const PREMIUM_PRICE = 999;
+export const PREMIUM_PRICE = 1;
